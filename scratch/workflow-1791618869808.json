@@ -1,0 +1,1582 @@
+{
+  "_platform": "agentbuilder",
+  "_version": 1,
+  "_exportedAt": "2026-10-10T07:54:29.806Z",
+  "_fingerprint": "YWN0aW9uOmNvZGUuZXhlY3V0ZXxhY3Rpb246Y29kZS5leGVjdXRlfGFjdGlvbjpj",
+  "nodes": [
+    {
+      "id": "webhook-1791519159872001",
+      "data": {
+        "label": "Webhook Trigger",
+        "inputs": {
+          "path": "8651917d-d75f-4b23-9939-5dad5b5f94af",
+          "method": "POST",
+          "options": {},
+          "allowedRoles": "admin, staff",
+          "jwtAlgorithm": "HS256",
+          "responseMode": "respondWithNode",
+          "roleClaimKey": "role",
+          "sessionClaim": "sub",
+          "sessionSource": "none",
+          "authentication": "none",
+          "requireRoleCheck": false
+        },
+        "toolId": "webhook",
+        "toolData": {
+          "id": "webhook",
+          "displayName": "Webhook Trigger",
+          "category": "Input /  Output",
+          "icon": "webhook",
+          "description": "Trigger workflow via webhook",
+          "inputSchemaJSON": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "The path to listen on (e.g. \"my-hook\")"
+              },
+              "method": {
+                "type": "string",
+                "enum": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE",
+                  "PATCH",
+                  "HEAD"
+                ],
+                "default": "POST",
+                "description": "HTTP Method"
+              },
+              "responseMode": {
+                "type": "string",
+                "enum": [
+                  "onReceived",
+                  "lastNode",
+                  "respondWithNode",
+                  "streaming"
+                ],
+                "default": "lastNode",
+                "description": "When to respond"
+              },
+              "authentication": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "basicAuth",
+                  "headerAuth",
+                  "jwtAuth"
+                ],
+                "default": "none",
+                "description": "Authentication"
+              },
+              "basicAuthUser": {
+                "type": "string",
+                "description": "Username"
+              },
+              "basicAuthPassword": {
+                "type": "string",
+                "description": "Password"
+              },
+              "headerAuthName": {
+                "type": "string",
+                "description": "Name"
+              },
+              "headerAuthValue": {
+                "type": "string",
+                "description": "Value"
+              },
+              "jwtSecret": {
+                "type": "string",
+                "description": "Secret"
+              },
+              "jwtAlgorithm": {
+                "type": "string",
+                "enum": [
+                  "HS256",
+                  "HS384",
+                  "HS512"
+                ],
+                "default": "HS256",
+                "description": "Algorithm"
+              },
+              "sessionClaim": {
+                "type": "string",
+                "default": "sub",
+                "description": "JWT claim used to identify the session"
+              },
+              "requireRoleCheck": {
+                "type": "boolean",
+                "default": false,
+                "description": "Require Role Check (RBAC)"
+              },
+              "roleClaimKey": {
+                "type": "string",
+                "default": "role",
+                "description": "Role Claim Key"
+              },
+              "allowedRoles": {
+                "type": "string",
+                "default": "admin, staff",
+                "description": "Allowed Roles (comma separated)"
+              },
+              "sessionSource": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "auto",
+                  "header",
+                  "cookie",
+                  "body"
+                ],
+                "default": "none",
+                "description": "Session Source"
+              },
+              "sessionSourceName": {
+                "type": "string",
+                "description": "Session Source Name (header / cookie / body field)"
+              },
+              "options": {
+                "type": "object",
+                "properties": {
+                  "allowedOrigins": {
+                    "type": "string",
+                    "description": "Allowed Origins (CORS)"
+                  },
+                  "binaryDataFieldName": {
+                    "type": "string",
+                    "description": "Field Name for Binary Data"
+                  },
+                  "ignoreBots": {
+                    "type": "boolean",
+                    "description": "Ignore Bots"
+                  },
+                  "ipAllowlist": {
+                    "type": "string",
+                    "description": "IP(s) Allowlist"
+                  },
+                  "noResponseBody": {
+                    "type": "boolean",
+                    "description": "No Response Body"
+                  },
+                  "rawBody": {
+                    "type": "boolean",
+                    "description": "Raw Body"
+                  },
+                  "responseCode": {
+                    "type": "number",
+                    "description": "Response Code"
+                  },
+                  "responseData": {
+                    "type": "string",
+                    "description": "Response Data"
+                  }
+                },
+                "additionalProperties": false,
+                "default": {},
+                "description": "Options"
+              }
+            },
+            "required": [
+              "path"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          "fields": [
+            {
+              "name": "path",
+              "displayName": "Path",
+              "type": "string",
+              "default": "",
+              "required": true,
+              "description": "The path to listen on (e.g. \"my-hook\")"
+            },
+            {
+              "name": "method",
+              "displayName": "HTTP Method",
+              "type": "options",
+              "default": "POST",
+              "required": true,
+              "options": [
+                {
+                  "name": "GET",
+                  "value": "GET"
+                },
+                {
+                  "name": "POST",
+                  "value": "POST"
+                },
+                {
+                  "name": "PUT",
+                  "value": "PUT"
+                },
+                {
+                  "name": "DELETE",
+                  "value": "DELETE"
+                },
+                {
+                  "name": "PATCH",
+                  "value": "PATCH"
+                },
+                {
+                  "name": "HEAD",
+                  "value": "HEAD"
+                }
+              ],
+              "description": "HTTP Method to listen for"
+            },
+            {
+              "name": "responseMode",
+              "displayName": "Respond",
+              "type": "options",
+              "default": "lastNode",
+              "required": true,
+              "options": [
+                {
+                  "name": "Immediately",
+                  "value": "onReceived"
+                },
+                {
+                  "name": "When Last Node Finishes",
+                  "value": "lastNode"
+                },
+                {
+                  "name": "Using 'Respond to Webhook' Node",
+                  "value": "respondWithNode"
+                },
+                {
+                  "name": "Streaming",
+                  "value": "streaming"
+                }
+              ],
+              "description": "When to respond to the webhook request"
+            },
+            {
+              "name": "authentication",
+              "displayName": "Authentication",
+              "type": "options",
+              "default": "none",
+              "options": [
+                {
+                  "name": "Basic Auth",
+                  "value": "basicAuth"
+                },
+                {
+                  "name": "Header Auth",
+                  "value": "headerAuth"
+                },
+                {
+                  "name": "JWT Auth",
+                  "value": "jwtAuth"
+                },
+                {
+                  "name": "None",
+                  "value": "none"
+                }
+              ],
+              "description": "The type of authentication to use for incoming webhook requests"
+            },
+            {
+              "name": "sessionSource",
+              "displayName": "Session Source",
+              "type": "options",
+              "default": "none",
+              "options": [
+                {
+                  "name": "None (legacy, no session)",
+                  "value": "none"
+                },
+                {
+                  "name": "Auto (platform issues a session id)",
+                  "value": "auto"
+                },
+                {
+                  "name": "From Header",
+                  "value": "header"
+                },
+                {
+                  "name": "From Cookie",
+                  "value": "cookie"
+                },
+                {
+                  "name": "From Body Field",
+                  "value": "body"
+                }
+              ],
+              "description": "How the platform identifies the caller for per-user session continuity. Required when memory or loops should partition by caller."
+            },
+            {
+              "name": "sessionSourceName",
+              "displayName": "Session Source Name",
+              "type": "string",
+              "default": "",
+              "placeholder": "e.g. X-Caller-Id (header), userId (body field), session_id (cookie)",
+              "description": "Header name, body field path, or cookie name used as the caller id.",
+              "displayOptions": {
+                "show": {
+                  "sessionSource": [
+                    "header",
+                    "cookie",
+                    "body"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "basicAuthUser",
+              "displayName": "User",
+              "type": "string",
+              "default": "",
+              "required": true,
+              "description": "The username for Basic Authentication",
+              "displayOptions": {
+                "show": {
+                  "authentication": [
+                    "basicAuth"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "basicAuthPassword",
+              "displayName": "Password",
+              "type": "string",
+              "default": "",
+              "required": true,
+              "typeOptions": {
+                "password": true
+              },
+              "description": "The password for Basic Authentication",
+              "displayOptions": {
+                "show": {
+                  "authentication": [
+                    "basicAuth"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "headerAuthName",
+              "displayName": "Name",
+              "type": "string",
+              "default": "",
+              "required": true,
+              "description": "The header name to check for authentication",
+              "displayOptions": {
+                "show": {
+                  "authentication": [
+                    "headerAuth"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "headerAuthValue",
+              "displayName": "Value",
+              "type": "string",
+              "default": "",
+              "required": true,
+              "typeOptions": {
+                "password": true
+              },
+              "description": "The expected header value for authentication",
+              "displayOptions": {
+                "show": {
+                  "authentication": [
+                    "headerAuth"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "jwtSecret",
+              "displayName": "Secret",
+              "type": "string",
+              "default": "",
+              "required": true,
+              "typeOptions": {
+                "password": true
+              },
+              "description": "The secret key used to verify the JWT token",
+              "displayOptions": {
+                "show": {
+                  "authentication": [
+                    "jwtAuth"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "jwtAlgorithm",
+              "displayName": "Algorithm",
+              "type": "options",
+              "default": "HS256",
+              "options": [
+                {
+                  "name": "HS256",
+                  "value": "HS256"
+                },
+                {
+                  "name": "HS384",
+                  "value": "HS384"
+                },
+                {
+                  "name": "HS512",
+                  "value": "HS512"
+                }
+              ],
+              "description": "The algorithm used to sign the JWT token",
+              "displayOptions": {
+                "show": {
+                  "authentication": [
+                    "jwtAuth"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "sessionClaim",
+              "displayName": "Session Claim",
+              "type": "string",
+              "default": "sub",
+              "description": "The claim in the JWT payload that identifies the user (e.g. sub, email, userId). Leave blank to skip session tracking.",
+              "displayOptions": {
+                "show": {
+                  "authentication": [
+                    "jwtAuth"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "requireRoleCheck",
+              "displayName": "Require Role Check (RBAC)",
+              "type": "boolean",
+              "default": false,
+              "description": "If enabled, the incoming JWT must contain an authorized role claim to execute the workflow.",
+              "displayOptions": {
+                "show": {
+                  "authentication": [
+                    "jwtAuth"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "roleClaimKey",
+              "displayName": "Role Claim Key",
+              "type": "string",
+              "default": "role",
+              "description": "The field name inside the JWT payload that contains the user's role (e.g., \"role\", \"groups\").",
+              "displayOptions": {
+                "show": {
+                  "authentication": [
+                    "jwtAuth"
+                  ],
+                  "requireRoleCheck": [
+                    true
+                  ]
+                }
+              }
+            },
+            {
+              "name": "allowedRoles",
+              "displayName": "Allowed Roles",
+              "type": "string",
+              "default": "admin, staff",
+              "description": "A comma-separated list of roles that are allowed to trigger this workflow. If empty, all roles pass.",
+              "displayOptions": {
+                "show": {
+                  "authentication": [
+                    "jwtAuth"
+                  ],
+                  "requireRoleCheck": [
+                    true
+                  ]
+                }
+              }
+            },
+            {
+              "name": "options",
+              "displayName": "Options",
+              "type": "collection",
+              "default": {},
+              "placeholder": "Add option",
+              "fields": [
+                {
+                  "name": "allowedOrigins",
+                  "displayName": "Allowed Origins (CORS)",
+                  "type": "string",
+                  "default": "*",
+                  "placeholder": "*",
+                  "description": "Comma-separated list of allowed origins for CORS. Use * to allow all origins."
+                },
+                {
+                  "name": "binaryDataFieldName",
+                  "displayName": "Field Name for Binary Data",
+                  "type": "string",
+                  "default": "data",
+                  "placeholder": "data",
+                  "description": "The name of the field in the request that contains binary data (for file uploads)."
+                },
+                {
+                  "name": "ignoreBots",
+                  "displayName": "Ignore Bots",
+                  "type": "boolean",
+                  "default": false,
+                  "description": "If enabled, requests from known bots (crawlers, spiders) will be ignored."
+                },
+                {
+                  "name": "ipAllowlist",
+                  "displayName": "IP(s) Allowlist",
+                  "type": "string",
+                  "default": "",
+                  "placeholder": "e.g. 127.0.0.1, 192.168.1.0/24",
+                  "description": "Comma-separated list of IPs or CIDR ranges. Only these IPs can trigger the webhook."
+                },
+                {
+                  "name": "noResponseBody",
+                  "displayName": "No Response Body",
+                  "type": "boolean",
+                  "default": false,
+                  "description": "If enabled, the webhook will respond with an empty body (only status code)."
+                },
+                {
+                  "name": "rawBody",
+                  "displayName": "Raw Body",
+                  "type": "boolean",
+                  "default": false,
+                  "description": "If enabled, the raw request body will be passed as-is without parsing."
+                },
+                {
+                  "name": "responseData",
+                  "displayName": "Response Data",
+                  "type": "string",
+                  "default": "",
+                  "placeholder": "Response body content",
+                  "description": "Custom response data to return when the webhook is triggered (JSON or text)."
+                }
+              ]
+            }
+          ]
+        },
+        "isTrigger": true,
+        "isFormWait": false,
+        "executionId": "6ac9c12730c1ef06229194a1",
+        "isTimerWait": false,
+        "isWebhookWait": false,
+        "connectedHandles": [],
+        "isPrimaryTrigger": true
+      },
+      "type": "webhook",
+      "width": 220,
+      "height": 100,
+      "dragging": false,
+      "position": {
+        "x": 194.4738794271869,
+        "y": 423.0659499151932
+      },
+      "selected": false,
+      "positionAbsolute": {
+        "x": 194.4738794271869,
+        "y": 423.0659499151932
+      }
+    },
+    {
+      "id": "code.execute-1791526921044002",
+      "data": {
+        "label": "Prepare & Clean Schema",
+        "inputs": {
+          "code": "\nconst input = $input.first().json;\n\n// Handle webhook output wrapped in \"body\" or sent directly\nconst payload = input.body ?? input;\n\nconst datasets = Array.isArray(payload.datasets)\n  ? payload.datasets\n  : [];\n\nfunction isMacMetadata(value) {\n  const name = String(value ?? \"\").replace(/\\\\/g, \"/\");\n  return (\n    name.includes(\"/__MACOSX/\") ||\n    name.startsWith(\"__MACOSX/\") ||\n    name === \"__MACOSX\" ||\n    name === \".DS_Store\" ||\n    name.endsWith(\"/.DS_Store\") ||\n    name.split(\"/\").some(part => part.startsWith(\"._\"))\n  );\n}\n\nfunction cleanName(value) {\n  return String(value ?? \"\").trim();\n}\n\nconst cleanedDatasets = [];\n\nfor (const dataset of datasets) {\n  const datasetName = cleanName(dataset.dataset_name);\n\n  if (!datasetName || isMacMetadata(datasetName)) continue;\n\n  const tables = Array.isArray(dataset.tables)\n    ? dataset.tables\n    : [];\n\n  const cleanedTables = [];\n\n  for (const table of tables) {\n    const tableName = cleanName(table.table_name);\n\n    if (!tableName || isMacMetadata(tableName)) continue;\n\n    const rawColumns = Array.isArray(table.columns)\n      ? table.columns\n      : Array.isArray(table.header_row)\n        ? table.header_row\n        : [];\n\n    const columns = rawColumns\n      .map(column => {\n        if (typeof column === \"string\") return cleanName(column);\n\n        if (column && typeof column === \"object\") {\n          return cleanName(\n            column.column_name ?? column.name ?? column._name\n          );\n        }\n\n        return \"\";\n      })\n      .filter(column =>\n        column &&\n        !isMacMetadata(column) &&\n        !/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F]/.test(column)\n      );\n\n    // Remove tables with no valid columns\n    if (columns.length === 0) continue;\n\n    cleanedTables.push({\n      table_name: tableName,\n      columns: [...new Set(columns)]\n    });\n  }\n\n  // Remove datasets with no remaining valid tables\n  if (cleanedTables.length === 0) continue;\n\n  cleanedDatasets.push({\n    dataset_name: datasetName,\n    tables: cleanedTables\n  });\n}\n\n// Structured input for the LLM node\nconst schemaInput = {\n  datasets: cleanedDatasets,\n  total_datasets: cleanedDatasets.length,\n  total_tables: cleanedDatasets.reduce(\n    (sum, dataset) => sum + dataset.tables.length, 0\n  ),\n  total_columns: cleanedDatasets.reduce(\n    (sum, dataset) =>\n      sum + dataset.tables.reduce(\n        (tableSum, table) => tableSum + table.columns.length, 0\n      ),\n    0\n  )\n};\n\nreturn [{\n  json: {\n    schema_input: JSON.stringify(schemaInput, null, 2),\n    source_schema: cleanedDatasets,\n    total_datasets: schemaInput.total_datasets,\n    total_tables: schemaInput.total_tables,\n    total_columns: schemaInput.total_columns\n  }\n}];",
+          "mode": "all",
+          "language": "javascript"
+        },
+        "toolId": "code.execute",
+        "toolData": {
+          "id": "code.execute",
+          "displayName": "Code",
+          "category": "Data  Processing",
+          "provider": "code",
+          "operation": "execute",
+          "icon": "💻",
+          "description": "Execute custom JavaScript or Python code",
+          "inputSchemaJSON": {
+            "type": "object",
+            "properties": {
+              "language": {
+                "type": "string",
+                "enum": [
+                  "javascript",
+                  "python"
+                ],
+                "description": "Programming language to execute"
+              },
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "each"
+                ],
+                "default": "all",
+                "description": "Execution mode"
+              },
+              "code": {
+                "type": "string",
+                "description": "Code to execute"
+              },
+              "input": {
+                "description": "Input data available as \"input\" variable"
+              },
+              "context": {
+                "description": "Execution context including other node results"
+              }
+            },
+            "required": [
+              "language",
+              "code"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          }
+        },
+        "isTrigger": false,
+        "isFormWait": false,
+        "executionId": "6ac9c12730c1ef06229194a1",
+        "isTimerWait": false,
+        "isWebhookWait": false,
+        "connectedHandles": [],
+        "isPrimaryTrigger": false
+      },
+      "type": "action",
+      "width": 220,
+      "height": 94,
+      "dragging": false,
+      "position": {
+        "x": 475.40568444704274,
+        "y": 426.8990579855106
+      },
+      "selected": false,
+      "positionAbsolute": {
+        "x": 475.40568444704274,
+        "y": 426.8990579855106
+      }
+    },
+    {
+      "id": "code.execute-1791526921259003",
+      "data": {
+        "label": "Validate & Format Output",
+        "inputs": {
+          "code": "\nconst input = $input.first().json;\n\nlet schema = input.response ?? input.consolidated_schema ?? input;\n\nif (typeof schema === \"string\") {\n  schema = schema.replace(/```json\\s*/i, \"\").replace(/```\\s*/g, \"\").trim();\n\n  try {\n    schema = JSON.parse(schema);\n  } catch (e) {\n    return [{\n      json: {\n        validation_status: \"failed\",\n        error: \"LLM response is not valid JSON\"\n      }\n    }];\n  }\n}\n\nconst valid =\n  schema &&\n  Array.isArray(schema.entities) &&\n  Array.isArray(schema.source_mappings) &&\n  Array.isArray(schema.relationships) &&\n  Array.isArray(schema.uncertainties);\n\nif (!valid) {\n  return [{\n    json: {\n      validation_status: \"failed\",\n      error: \"Required schema sections are missing or invalid.\",\n      received_sections: Object.keys(schema || {}),\n      consolidated_schema: schema,\n      source_schema: input.source_schema,\n      schema_input: input.schema_input\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    validation_status: \"valid_json\",\n    consolidated_schema: schema,\n    source_schema: input.source_schema,\n    schema_input: input.schema_input,\n    total_datasets: input.total_datasets,\n    total_tables: input.total_tables,\n    total_columns: input.total_columns\n  }\n}];",
+          "mode": "all",
+          "language": "javascript"
+        },
+        "toolId": "code.execute",
+        "toolData": {
+          "id": "code.execute",
+          "displayName": "Code",
+          "category": "Data  Processing",
+          "provider": "code",
+          "operation": "execute",
+          "icon": "💻",
+          "description": "Execute custom JavaScript or Python code",
+          "inputSchemaJSON": {
+            "type": "object",
+            "properties": {
+              "language": {
+                "type": "string",
+                "enum": [
+                  "javascript",
+                  "python"
+                ],
+                "description": "Programming language to execute"
+              },
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "each"
+                ],
+                "default": "all",
+                "description": "Execution mode"
+              },
+              "code": {
+                "type": "string",
+                "description": "Code to execute"
+              },
+              "input": {
+                "description": "Input data available as \"input\" variable"
+              },
+              "context": {
+                "description": "Execution context including other node results"
+              }
+            },
+            "required": [
+              "language",
+              "code"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          }
+        },
+        "isTrigger": false,
+        "isFormWait": false,
+        "executionId": "6ac9c12730c1ef06229194a1",
+        "isTimerWait": false,
+        "isWebhookWait": false,
+        "connectedHandles": [],
+        "isPrimaryTrigger": false
+      },
+      "type": "action",
+      "width": 220,
+      "height": 94,
+      "dragging": false,
+      "position": {
+        "x": 1084.5136840152516,
+        "y": 286.0829451419933
+      },
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1084.5136840152516,
+        "y": 286.0829451419933
+      }
+    },
+    {
+      "id": "llm-agent-execute-1791533193943002",
+      "data": {
+        "label": "LLM Node",
+        "inputs": {
+          "model": "gemini-3.1-flash-lite-preview",
+          "provider": "gemini",
+          "question": "You are a database schema consolidation expert.\n\nAnalyze the input JSON containing multiple datasets, tables, and columns.\n\n1. Preserve every source dataset, table, and column.\n2. Identify semantically equivalent fields across tables and datasets.\n3. Infer potential primary keys and foreign-key relationships using column names and table context.\n4. Distinguish confirmed mappings from inferred or uncertain relationships.\n5. Never merge unrelated fields just because they share the same column name.\n6. Preserve each field's original dataset, table, and column name.\n7. Return only valid JSON containing:\n\n   * `entities`\n   * `source_mappings`\n   * `relationships`\n   * `uncertainties`      **Schema Preservation and Completeness Requirements**\n\n1. Preserve every source column from every dataset and table. Do not omit, rename, or invent columns.\n2. Include a `source_columns` array containing every column in the exact format `DATASET.table.column`.\n3. Keep the original dataset and table names unchanged.\n4. Consolidate semantically similar fields into `source_mappings`, but preserve every original source reference.\n5. Keep entities from distinct business domains separate. For example, `DATASET 1.purchase_orders.id` and `DATASET 3.olist_orders_dataset.order_id` must remain distinct entities.\n6. Do not infer relationships unless supported by the provided schema. Mark uncertain relationships explicitly.\n7. Before returning, compare the output against the complete input schema and verify that every source column is represented.\n8. Return valid JSON only, with no Markdown fences.\n\nYou must preserve ALL 123 source columns from the input schema.\n\n1. Read every dataset, table, and column in `schema_input`.\n2. Include every original column reference in the output `consolidated_schema`.\n3. Each column must appear in at least one of these arrays:\n\n   * `entities[].source_columns`\n   * `source_mappings[].references`\n   * `uncertainties[].columns`\n4. Use the exact format `DATASET.table.column` for every reference, preserving the original dataset, table, and column names.\n5. Do not omit columns just because they do not have an obvious business meaning. Create suitable entities or semantic concepts for them.\n6. Keep Dataset 1 (procurement) and Dataset 3 (e-commerce) as separate business domains unless a relationship is explicitly supported by the input.\n7. Do not invent columns or relationships.\n8. Before returning the JSON, verify that all original source columns are represented at least once.\n9. Return valid JSON only, using the required output structure.\n\nInput schema:\n {{$node[\"code.execute-1791526921044002\"].json[\"schema_input\"]}}\n",
+          "credentialId": "90e70c33-1b57-4bed-976f-d655a41384c4",
+          "promptSource": "define",
+          "systemPrompt": "",
+          "enableFallback": false,
+          "requireSpecificOutputFormat": false
+        },
+        "toolId": "llm-agent-execute",
+        "toolData": {
+          "id": "llm-agent-execute",
+          "displayName": "LLM Node",
+          "category": "AI / LLM",
+          "provider": "llmagent",
+          "operation": "execute",
+          "icon": "smart_toy",
+          "description": "Execute prompts with various LLM models (Gemini, Groq)",
+          "inputSchemaJSON": {
+            "type": "object",
+            "properties": {
+              "systemPrompt": {
+                "type": "string",
+                "default": "",
+                "description": "System prompt or persona that sets behavior (optional, hidden in UI)"
+              },
+              "promptSource": {
+                "type": "string",
+                "enum": [
+                  "connected",
+                  "define"
+                ],
+                "default": "define",
+                "description": "Source for Prompt (User Message)."
+              },
+              "question": {
+                "type": "string",
+                "description": "Prompt (User Message)"
+              },
+              "file": {
+                "type": "string",
+                "description": "Upload File "
+              },
+              "memory": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "config": {}
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": false,
+                "description": "Conversation memory configuration"
+              },
+              "provider": {
+                "type": "string",
+                "enum": [
+                  "groq",
+                  "gemini",
+                  "openai",
+                  "local"
+                ],
+                "default": "gemini",
+                "description": "The LLM provider to use"
+              },
+              "model": {
+                "type": "string",
+                "description": "The LLM model to use"
+              },
+              "requireSpecificOutputFormat": {
+                "type": "boolean",
+                "default": false,
+                "description": "Whether to require a specific output format"
+              },
+              "outputFormatSchema": {
+                "type": "string",
+                "description": "The schema or description of the required output format (e.g. JSON schema or \"name, age, email\")"
+              },
+              "enableFallback": {
+                "type": "boolean",
+                "default": false,
+                "description": "Whether to auto-retry with a fallback model if the primary fails"
+              },
+              "fallbackModel": {
+                "type": "string",
+                "description": "The fallback model ID to use when the primary model fails"
+              },
+              "temperature": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 2,
+                "description": "Controls how random or creative the output is. Lower values produce more focused and deterministic responses, higher values produce more varied and creative output."
+              },
+              "maxTokens": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 131072,
+                "description": "The maximum number of tokens (words/word-pieces) the model is allowed to generate in its response. Higher values allow longer answers but cost more."
+              },
+              "topK": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100,
+                "description": "Limits the model to only consider the top K most probable next tokens at each step. Lower values make output more focused, higher values allow more variety."
+              },
+              "credentials": {
+                "type": "object",
+                "properties": {
+                  "apiKey": {
+                    "type": "string",
+                    "description": "API key for the selected LLM provider"
+                  }
+                },
+                "required": [
+                  "apiKey"
+                ],
+                "additionalProperties": false
+              },
+              "userId": {
+                "type": "string",
+                "description": "ID of the user executing the workflow"
+              },
+              "workflowId": {
+                "type": "string",
+                "description": "ID of the current workflow"
+              }
+            },
+            "required": [
+              "credentials"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          "executionMode": "batch"
+        },
+        "isTrigger": false,
+        "isFormWait": false,
+        "executionId": "6ac9c12730c1ef06229194a1",
+        "isTimerWait": false,
+        "isWebhookWait": false,
+        "connectedHandles": [],
+        "isPrimaryTrigger": false
+      },
+      "type": "action",
+      "width": 220,
+      "height": 94,
+      "dragging": false,
+      "position": {
+        "x": 804.3467276442545,
+        "y": 288.180584816167
+      },
+      "selected": false,
+      "positionAbsolute": {
+        "x": 804.3467276442545,
+        "y": 288.180584816167
+      }
+    },
+    {
+      "id": "code.execute-1791539017097003",
+      "data": {
+        "label": "Completeness Check Code",
+        "inputs": {
+          "code": "\nconst items = $input.all().map(item => item.json);\n\n// Find the two inputs, even if Merge outputs separate items\nconst consolidatedItem = items.find(\n  item => item.consolidated_schema\n);\n\nconst sourceItem = items.find(\n  item => Array.isArray(item.source_schema)\n);\n\nif (!consolidatedItem || !sourceItem) {\n  return [{\n    json: {\n      status: \"error\",\n      message: \"Missing consolidated_schema or source_schema\",\n      received_items: items.length\n    }\n  }];\n}\n\nconst schema = consolidatedItem.consolidated_schema;\nconst sourceSchema = sourceItem.source_schema;\n\n// Build the complete list of original column paths\nconst originalColumns = [];\n\nfor (const dataset of sourceSchema) {\n  for (const table of dataset.tables || []) {\n    for (const column of table.columns || []) {\n      originalColumns.push(\n        `${dataset.dataset_name}.${table.table_name}.${column}`\n      );\n    }\n  }\n}\n\n// Collect source references from the consolidated output\nconst references = new Set();\n\nfunction scan(value) {\n  if (typeof value === \"string\") {\n    references.add(value);\n    return;\n  }\n\n  if (Array.isArray(value)) {\n    value.forEach(scan);\n    return;\n  }\n\n  if (value && typeof value === \"object\") {\n    if (value.dataset && value.table && value.column) {\n      references.add(\n        `${value.dataset}.${value.table}.${value.column}`\n      );\n    }\n\n    Object.values(value).forEach(scan);\n  }\n}\n\nscan(schema);\n\nconst representedColumns = originalColumns.filter(\n  column => references.has(column)\n);\n\nconst missingColumns = originalColumns.filter(\n  column => !references.has(column)\n);\n\nconst completenessPercent = originalColumns.length\n  ? Math.round(\n      representedColumns.length / originalColumns.length * 100\n    )\n  : 100;\n\nreturn [{\n  json: {\n    status: missingColumns.length === 0\n      ? \"complete\"\n      : \"incomplete\",\n    validation_status: consolidatedItem.validation_status,\n    total_source_columns: originalColumns.length,\n    represented_columns: representedColumns.length,\n    missing_column_count: missingColumns.length,\n    completeness_percent: completenessPercent,\n    missing_columns: missingColumns,\n    consolidated_schema: schema\n  }\n}];",
+          "mode": "all",
+          "language": "javascript"
+        },
+        "toolId": "code.execute",
+        "toolData": {
+          "id": "code.execute",
+          "displayName": "Code",
+          "category": "Data  Processing",
+          "provider": "code",
+          "operation": "execute",
+          "icon": "💻",
+          "description": "Execute custom JavaScript or Python code",
+          "inputSchemaJSON": {
+            "type": "object",
+            "properties": {
+              "language": {
+                "type": "string",
+                "enum": [
+                  "javascript",
+                  "python"
+                ],
+                "description": "Programming language to execute"
+              },
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "each"
+                ],
+                "default": "all",
+                "description": "Execution mode"
+              },
+              "code": {
+                "type": "string",
+                "description": "Code to execute"
+              },
+              "input": {
+                "description": "Input data available as \"input\" variable"
+              },
+              "context": {
+                "description": "Execution context including other node results"
+              }
+            },
+            "required": [
+              "language",
+              "code"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          }
+        },
+        "isTrigger": false,
+        "isFormWait": false,
+        "executionId": "6ac9c12730c1ef06229194a1",
+        "isTimerWait": false,
+        "isWebhookWait": false,
+        "connectedHandles": [],
+        "isPrimaryTrigger": false
+      },
+      "type": "action",
+      "width": 220,
+      "height": 94,
+      "dragging": false,
+      "position": {
+        "x": 1363.6233089519287,
+        "y": 423.3936762381116
+      },
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1363.6233089519287,
+        "y": 423.3936762381116
+      }
+    },
+    {
+      "id": "llm-agent-execute-1791542444903005",
+      "data": {
+        "label": "LLM Node",
+        "inputs": {
+          "model": "gemini-3.1-flash-lite-preview",
+          "provider": "gemini",
+          "question": "You are an expert Data Schema Designer specializing in multi-dataset schema consolidation, entity identification, source mapping, and relationship validation.\n## OBJECTIVE \n\nConsolidate the schemas from multiple datasets into one unified, standardized, and validated consolidated schema.\n\nThe final output must be a complete consolidated schema that preserves all original source columns and references while organizing them into logically correct entities.\n\n## INPUT\n {{$node[\"code.execute-1791545861431007\"].json[\"llm_payload\"][\"entities\"]}} {{$node[\"code.execute-1791545861431007\"].json[\"llm_payload\"][\"source_mappings\"]}} {{$node[\"code.execute-1791545861431007\"].json[\"llm_payload\"][\"relationships\"]}} {{$node[\"code.execute-1791545861431007\"].json[\"llm_payload\"][\"uncertainties\"]}}\n\nYou will receive a JSON payload containing available schema information, which may include:\n\nUse the actual input payload as the source of truth. If additional source-column information is provided, use it to verify completeness.\n\n## CONSOLIDATION REQUIREMENTS\n\n### 1. Entity Identification and Organization\n\n* Identify every distinct logical entity represented by the source tables.\n* Organize each entity according to its actual business meaning and source-table structure.\n* Create separate entities for unrelated tables, even when they belong to the same dataset or business domain.\n* Do not group unrelated tables into generic entities such as `Internal_Misc` or `Internal_Finance_Operations`.\n* For example, supplier invoices, supplier payments, goods receipts, purchase order lines, ecommerce sellers, order items, order payments, and order reviews should be separate entities when they represent distinct source tables and concepts.\n* Standardize entity names using clear, consistent `Pascal_Case` naming conventions.\n* Merge entities only when the input provides sufficient evidence that they represent the same logical entity.\n* Do not merge entities merely because they contain similarly named columns.\n\n### 2. Column Standardization\n\n* Give every source column a clear, consistent standardized column name using `snake_case`.\n* Preserve the original column name in its source reference without modification.\n* Keep distinct columns separate unless their equivalence is supported by the input.\n* When equivalent source columns are consolidated into one standardized column, include every corresponding original source reference in that column's `source_columns` array.\n* Do not merge columns merely because they share a name such as `id`, `status`, `amount`, `order_id`, or `product_id`.\n* When the same column name has different meanings across entities, keep the columns separate.\n* Do not invent new source columns, attributes, identifiers, or values.\n\n### 3. Source Column Preservation\n\n* Preserve every source column provided in the input exactly once across the consolidated schema.\n* Each source column must retain its complete original reference:\n\n  * `dataset_name`\n  * `table_name`\n  * `column_name`\n* Do not omit, duplicate, rename, rewrite, or fabricate any original source reference.\n* Treat a source column's identity as the complete combination of its dataset name, table name, and column name.\n* Two columns with the same column name are distinct source columns when their dataset or table references differ.\n* Use the actual source-column inventory as the authoritative list for completeness validation.\n* If the input contains both a source-column inventory and entity-level column information, reconcile them without counting the same input source column twice.\n\n### 4. Source Mappings\n\n* Identify equivalent business concepts across source columns when supported by the input evidence.\n* Each mapping must include a clear business concept and the complete original references of the relevant source columns.\n* Set `mapping_status` to `confirmed` only when equivalence is sufficiently supported by the input.\n* Set `mapping_status` to `uncertain` when equivalence is plausible but unconfirmed.\n* Do not assume that similarly named identifiers from different datasets refer to the same records.\n* Do not create mappings simply to connect every dataset.\n* Include only meaningful mappings supported by the available evidence.\n\n### 5. Relationships\n\n* Preserve all supported relationships supplied in the input.\n* Identify additional relationships only when supported by explicit keys, source metadata, or sufficiently clear evidence in the input.\n* Represent each relationship using complete original source references for both endpoints.\n* Use `foreign_key` for supported foreign-key relationships and `semantic_relationship` for supported non-key relationships.\n* Use `confirmed` only for relationships established by the input evidence.\n* Use `inferred` only for relationships reasonably inferred from available evidence but not explicitly confirmed.\n* Explain the evidence for inferred relationships in the `reason` field.\n* Do not invent foreign keys, cardinalities, joins, or relationships.\n* Do not treat a shared column name as sufficient evidence of a relationship.\n\n### 6. Uncertainties\n\n* Record unresolved entity equivalence, column mappings, and relationships in `uncertainties`.\n* Include the complete source references relevant to each uncertainty.\n* Explain what is uncertain and why the available evidence is insufficient.\n* Do not mark a mapping or relationship as confirmed while simultaneously flagging the same claim as unresolved.\n* Do not silently resolve uncertainty by making assumptions.\n\n## REQUIRED OUTPUT FORMAT\n\nReturn a single JSON object with the following structure. The values shown below are illustrative placeholders; replace them with the actual results derived from the input.\n\n{\n\"consolidated_schema\": {\n\"entities\": [\n{\n\"entity_name\": \"Standardized_Entity_Name\",\n\"columns\": [\n{\n\"column_name\": \"standardized_column_name\",\n\"source_columns\": [\n{\n\"dataset_name\": \"original_dataset_name\",\n\"table_name\": \"original_table_name\",\n\"column_name\": \"original_column_name\"\n}\n]\n}\n]\n}\n],\n\"source_mappings\": [\n{\n\"concept\": \"Business_Concept\",\n\"references\": [\n{\n\"dataset_name\": \"original_dataset_name\",\n\"table_name\": \"original_table_name\",\n\"column_name\": \"original_column_name\"\n}\n],\n\"mapping_status\": \"confirmed\"\n}\n],\n\"relationships\": [\n{\n\"from\": {\n\"dataset_name\": \"original_dataset_name\",\n\"table_name\": \"original_table_name\",\n\"column_name\": \"original_column_name\"\n},\n\"to\": {\n\"dataset_name\": \"original_dataset_name\",\n\"table_name\": \"original_table_name\",\n\"column_name\": \"original_column_name\"\n},\n\"relationship_type\": \"foreign_key\",\n\"status\": \"confirmed\",\n\"reason\": \"Evidence supporting the relationship\"\n}\n],\n\"uncertainties\": [\n{\n\"type\": \"entity_mapping\",\n\"references\": [\n{\n\"dataset_name\": \"original_dataset_name\",\n\"table_name\": \"original_table_name\",\n\"column_name\": \"original_column_name\"\n}\n],\n\"reason\": \"Explanation of the unresolved uncertainty\"\n}\n]\n},\n\"validation_summary\": {\n\"input_source_column_count\": 0,\n\"represented_source_column_count\": 0,\n\"missing_source_column_count\": 0,\n\"duplicate_source_column_count\": 0,\n\"completeness_percent\": 0,\n\"validation_status\": \"valid\",\n\"missing_columns\": [],\n\"duplicate_columns\": []\n}\n}\n\n## VALIDATION REQUIREMENTS\n\nBefore returning the output, perform the following checks:\n\n1. Count the unique input source columns using their complete dataset, table, and column references.\n\n2. Verify that every input source column appears in the consolidated schema exactly once.\n\n3. Count represented source columns by examining every `source_columns` entry under every entity.\n\n4. Identify missing source columns by comparing the input inventory with the consolidated output.\n\n5. Identify duplicate source references appearing more than once in the consolidated entities.\n\n6. Calculate `completeness_percent` as:\n\n   completeness_percent = (number of unique input source columns represented / number of unique input source columns) × 100\n\n7. If the input contains zero source columns, set `completeness_percent` to 0 and explain the limitation through the validation fields available in the output.\n\n8. Set `validation_status` to `valid` only when every input source column is represented exactly once and the structural checks pass. Otherwise, set it to `invalid`.\n\n9. Ensure that `missing_source_column_count`, `duplicate_source_column_count`, `missing_columns`, and `duplicate_columns` reflect the actual comparison results.\n\n10. Ensure that every source mapping and relationship references source columns present in the input.\n\n11. Ensure that unresolved mappings and relationships are consistently represented in `uncertainties`.\n\n12. Do not fabricate counts or report successful validation without performing the checks.\n\nThe `represented_source_column_count` must count unique source references actually represented in the consolidated entities. The `input_source_column_count` must count unique source references in the authoritative input inventory. Do not assume these counts are equal.\n\n## OUTPUT RULES\n\n* Return only valid JSON.\n* Do not wrap the JSON in Markdown code fences.\n* Do not include explanations, comments, or text outside the JSON object.\n* Use double quotes for all JSON keys and string values.\n* Do not include trailing commas.\n* Include all required top-level fields and nested fields.\n* Use empty arrays when there are no supported mappings, relationships, uncertainties, missing columns, or duplicate columns.\n* Do not return the example placeholder values as actual results.\n* Do not omit source columns to reduce output size.\n* Do not claim completeness unless the validation checks support it.\n\nYour final result must be the actual consolidated schema derived from the supplied input, with correctly separated entities, standardized columns, preserved source references, evidence-based mappings and relationships, explicit uncertainties, and an accurate validation summary.\n\n",
+          "credentialId": "90e70c33-1b57-4bed-976f-d655a41384c4",
+          "promptSource": "define",
+          "systemPrompt": "",
+          "enableFallback": false,
+          "requireSpecificOutputFormat": false
+        },
+        "toolId": "llm-agent-execute",
+        "toolData": {
+          "id": "llm-agent-execute",
+          "displayName": "LLM Node",
+          "category": "AI / LLM",
+          "provider": "llmagent",
+          "operation": "execute",
+          "icon": "smart_toy",
+          "description": "Execute prompts with various LLM models (Gemini, Groq)",
+          "inputSchemaJSON": {
+            "type": "object",
+            "properties": {
+              "systemPrompt": {
+                "type": "string",
+                "default": "",
+                "description": "System prompt or persona that sets behavior (optional, hidden in UI)"
+              },
+              "promptSource": {
+                "type": "string",
+                "enum": [
+                  "connected",
+                  "define"
+                ],
+                "default": "define",
+                "description": "Source for Prompt (User Message)."
+              },
+              "question": {
+                "type": "string",
+                "description": "Prompt (User Message)"
+              },
+              "file": {
+                "type": "string",
+                "description": "Upload File "
+              },
+              "memory": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "config": {}
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": false,
+                "description": "Conversation memory configuration"
+              },
+              "provider": {
+                "type": "string",
+                "enum": [
+                  "groq",
+                  "gemini",
+                  "openai",
+                  "local"
+                ],
+                "default": "gemini",
+                "description": "The LLM provider to use"
+              },
+              "model": {
+                "type": "string",
+                "description": "The LLM model to use"
+              },
+              "requireSpecificOutputFormat": {
+                "type": "boolean",
+                "default": false,
+                "description": "Whether to require a specific output format"
+              },
+              "outputFormatSchema": {
+                "type": "string",
+                "description": "The schema or description of the required output format (e.g. JSON schema or \"name, age, email\")"
+              },
+              "enableFallback": {
+                "type": "boolean",
+                "default": false,
+                "description": "Whether to auto-retry with a fallback model if the primary fails"
+              },
+              "fallbackModel": {
+                "type": "string",
+                "description": "The fallback model ID to use when the primary model fails"
+              },
+              "temperature": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 2,
+                "description": "Controls how random or creative the output is. Lower values produce more focused and deterministic responses, higher values produce more varied and creative output."
+              },
+              "maxTokens": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 131072,
+                "description": "The maximum number of tokens (words/word-pieces) the model is allowed to generate in its response. Higher values allow longer answers but cost more."
+              },
+              "topK": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100,
+                "description": "Limits the model to only consider the top K most probable next tokens at each step. Lower values make output more focused, higher values allow more variety."
+              },
+              "credentials": {
+                "type": "object",
+                "properties": {
+                  "apiKey": {
+                    "type": "string",
+                    "description": "API key for the selected LLM provider"
+                  }
+                },
+                "required": [
+                  "apiKey"
+                ],
+                "additionalProperties": false
+              },
+              "userId": {
+                "type": "string",
+                "description": "ID of the user executing the workflow"
+              },
+              "workflowId": {
+                "type": "string",
+                "description": "ID of the current workflow"
+              }
+            },
+            "required": [
+              "credentials"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          "executionMode": "batch"
+        },
+        "isTrigger": false,
+        "isFormWait": false,
+        "executionId": "6ac9c12730c1ef06229194a1",
+        "isTimerWait": false,
+        "isWebhookWait": false,
+        "connectedHandles": [],
+        "isPrimaryTrigger": false
+      },
+      "type": "action",
+      "width": 220,
+      "height": 94,
+      "dragging": false,
+      "position": {
+        "x": 2152.5869631625724,
+        "y": 426.7616652672217
+      },
+      "selected": false,
+      "positionAbsolute": {
+        "x": 2152.5869631625724,
+        "y": 426.7616652672217
+      }
+    },
+    {
+      "id": "code.execute-1791543676475006",
+      "data": {
+        "label": "Extract Source Columns",
+        "inputs": {
+          "code": "\nconst input = $input.first()?.json ?? {};\n\n// Handle the wrapper shown in your actual node output.\nconst result = input.items?.[0]?.json ?? input;\n\nconst entities = result.consolidated_schema?.entities ?? [];\nconst sourceColumns = [];\n\n// Extract every source column from every entity.\nfor (const entity of entities) {\n  for (const source of entity.source_columns ?? []) {\n    if (typeof source !== \"string\") continue;\n\n    const parts = source.split(\".\");\n    const columnName = parts.pop();\n    const tableName = parts.pop();\n    const datasetName = parts.join(\".\");\n\n    sourceColumns.push({\n      dataset_name: datasetName,\n      table_name: tableName,\n      column_name: columnName,\n      source_column: source,\n      consolidated_entity: entity.entity_name\n    });\n  }\n}\n\n// Remove duplicate source-column references.\nconst uniqueColumns = [\n  ...new Map(\n    sourceColumns.map(col => [col.source_column, col])\n  ).values()\n];\n\nreturn [{\n  json: {\n    ...result,\n    source_columns: uniqueColumns,\n    extracted_source_column_count: uniqueColumns.length,\n    extraction_status:\n      uniqueColumns.length > 0 ? \"success\" : \"no_columns_found\"\n  }\n}];",
+          "mode": "all",
+          "language": "javascript"
+        },
+        "toolId": "code.execute",
+        "toolData": {
+          "id": "code.execute",
+          "displayName": "Code",
+          "category": "Data  Processing",
+          "provider": "code",
+          "operation": "execute",
+          "icon": "💻",
+          "description": "Execute custom JavaScript or Python code",
+          "inputSchemaJSON": {
+            "type": "object",
+            "properties": {
+              "language": {
+                "type": "string",
+                "enum": [
+                  "javascript",
+                  "python"
+                ],
+                "description": "Programming language to execute"
+              },
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "each"
+                ],
+                "default": "all",
+                "description": "Execution mode"
+              },
+              "code": {
+                "type": "string",
+                "description": "Code to execute"
+              },
+              "input": {
+                "description": "Input data available as \"input\" variable"
+              },
+              "context": {
+                "description": "Execution context including other node results"
+              }
+            },
+            "required": [
+              "language",
+              "code"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          }
+        },
+        "isFormWait": false,
+        "executionId": "6ac9c12730c1ef06229194a1",
+        "isTimerWait": false,
+        "isWebhookWait": false,
+        "connectedHandles": []
+      },
+      "type": "action",
+      "width": 220,
+      "height": 94,
+      "dragging": false,
+      "position": {
+        "x": 1641.764971087026,
+        "y": 424.37358178191175
+      },
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1641.764971087026,
+        "y": 424.37358178191175
+      }
+    },
+    {
+      "id": "code.execute-1791545861431007",
+      "data": {
+        "label": "Code",
+        "inputs": {
+          "code": "// Get all incoming items\nconst allItems = $input.all();\n\n// Get the schema data\nconst data = allItems[0].json;\nconst schema = data.consolidated_schema;\n\n// Prepare the LLM payload\nconst llm_payload = {\n  entities: schema.entities || [],\n  source_mappings: schema.source_mappings || [],\n  relationships: schema.relationships || [],\n  uncertainties: schema.uncertainties || [],\n  source_column_count: data.total_source_columns || 0,\n  completeness_percent: data.completeness_percent || 0\n};\n\nreturn [\n  {\n    json: {\n      llm_payload\n    }\n  }\n];",
+          "mode": "all",
+          "language": "javascript"
+        },
+        "toolId": "code.execute",
+        "toolData": {
+          "id": "code.execute",
+          "displayName": "Code",
+          "category": "Data  Processing",
+          "provider": "code",
+          "operation": "execute",
+          "icon": "💻",
+          "description": "Execute custom JavaScript or Python code",
+          "inputSchemaJSON": {
+            "type": "object",
+            "properties": {
+              "language": {
+                "type": "string",
+                "enum": [
+                  "javascript",
+                  "python"
+                ],
+                "description": "Programming language to execute"
+              },
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "each"
+                ],
+                "default": "all",
+                "description": "Execution mode"
+              },
+              "code": {
+                "type": "string",
+                "description": "Code to execute"
+              },
+              "input": {
+                "description": "Input data available as \"input\" variable"
+              },
+              "context": {
+                "description": "Execution context including other node results"
+              }
+            },
+            "required": [
+              "language",
+              "code"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          }
+        },
+        "isTrigger": false,
+        "isFormWait": false,
+        "executionId": "6ac9c12730c1ef06229194a1",
+        "isTimerWait": false,
+        "isWebhookWait": false,
+        "connectedHandles": [],
+        "isPrimaryTrigger": false
+      },
+      "type": "action",
+      "width": 220,
+      "height": 94,
+      "dragging": false,
+      "position": {
+        "x": 1897.5508987608073,
+        "y": 427.7294750057473
+      },
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1897.5508987608073,
+        "y": 427.7294750057473
+      }
+    },
+    {
+      "id": "code.execute-1791546392811008",
+      "data": {
+        "label": "Code",
+        "inputs": {
+          "code": "const item = $input.first().json;\n\n// Get the LLM response\nconst response = item.response || item.items?.[0]?.json?.response;\n\n// Convert response string to JSON\nconst data = typeof response === \"string\"\n  ? JSON.parse(response)\n  : response;\n\n// Return formatted output\nreturn [\n  {\n    json: {\n      consolidated_schema: data?.consolidated_schema || {},\n      validation_summary: data?.validation_summary || {},\n      model: item.model || item.items?.[0]?.json?.model || null,\n      tokensUsed: item.tokensUsed || item.items?.[0]?.json?.tokensUsed || 0\n    }\n  }\n];",
+          "mode": "all",
+          "language": "javascript"
+        },
+        "toolId": "code.execute",
+        "toolData": {
+          "id": "code.execute",
+          "displayName": "Code",
+          "category": "Data  Processing",
+          "provider": "code",
+          "operation": "execute",
+          "icon": "💻",
+          "description": "Execute custom JavaScript or Python code",
+          "inputSchemaJSON": {
+            "type": "object",
+            "properties": {
+              "language": {
+                "type": "string",
+                "enum": [
+                  "javascript",
+                  "python"
+                ],
+                "description": "Programming language to execute"
+              },
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "each"
+                ],
+                "default": "all",
+                "description": "Execution mode"
+              },
+              "code": {
+                "type": "string",
+                "description": "Code to execute"
+              },
+              "input": {
+                "description": "Input data available as \"input\" variable"
+              },
+              "context": {
+                "description": "Execution context including other node results"
+              }
+            },
+            "required": [
+              "language",
+              "code"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          }
+        },
+        "isTrigger": false,
+        "isFormWait": false,
+        "executionId": "6ac9c12730c1ef06229194a1",
+        "isTimerWait": false,
+        "isWebhookWait": false,
+        "connectedHandles": [],
+        "isPrimaryTrigger": false
+      },
+      "type": "action",
+      "width": 220,
+      "height": 94,
+      "dragging": false,
+      "position": {
+        "x": 2393.6082545946692,
+        "y": 429.1059346951497
+      },
+      "selected": false,
+      "positionAbsolute": {
+        "x": 2393.6082545946692,
+        "y": 429.1059346951497
+      }
+    },
+    {
+      "id": "respondToWebhook-1791603092606001",
+      "data": {
+        "label": "Webhook Response",
+        "inputs": {
+          "respondWith": "JSON",
+          "responseBody": "  {{$node[\"code.execute-1791546392811008\"].json[\"consolidated_schema\"]}}",
+          "inputFieldName": "data"
+        },
+        "toolId": "respondToWebhook",
+        "toolData": {
+          "id": "respondToWebhook",
+          "displayName": "Webhook Response",
+          "category": "Input /  Output",
+          "icon": "reply",
+          "description": "Send response to webhook",
+          "inputSchemaJSON": {
+            "type": "object",
+            "properties": {
+              "respondWith": {
+                "type": "string",
+                "enum": [
+                  "All Incoming Items",
+                  "First Incoming Item",
+                  "JSON",
+                  "Binary File",
+                  "JWT Token",
+                  "Text",
+                  "Redirect",
+                  "No Data"
+                ],
+                "default": "All Incoming Items",
+                "description": "What to respond with."
+              },
+              "responseBody": {
+                "type": "string",
+                "description": "The body of the response (can be an expression)"
+              },
+              "credentialId": {
+                "type": "string",
+                "description": "JWT credential ID"
+              },
+              "payload": {
+                "type": "string",
+                "description": "JWT Token Payload (JSON string or expression)"
+              },
+              "redirectUrl": {
+                "type": "string",
+                "description": "Redirect URL"
+              },
+              "inputFieldName": {
+                "type": "string",
+                "default": "data",
+                "description": "Input Field Name containing the binary file"
+              },
+              "responseCode": {
+                "type": "number",
+                "description": "HTTP Response Code"
+              },
+              "putResponseInField": {
+                "type": "string",
+                "description": "If set, put the response into this field instead of the default output"
+              },
+              "enableStreaming": {
+                "type": "boolean",
+                "description": "Stream the response back to the caller when supported"
+              },
+              "options": {
+                "type": "object",
+                "properties": {
+                  "headers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          }
+        },
+        "isTrigger": false,
+        "isFormWait": false,
+        "executionId": "6ac9c12730c1ef06229194a1",
+        "isTimerWait": false,
+        "isWebhookWait": false,
+        "connectedHandles": [],
+        "isPrimaryTrigger": false
+      },
+      "type": "action",
+      "width": 220,
+      "height": 94,
+      "dragging": false,
+      "position": {
+        "x": 2628.491467438088,
+        "y": 429.9182762706804
+      },
+      "selected": true,
+      "positionAbsolute": {
+        "x": 2628.491467438088,
+        "y": 429.9182762706804
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "reactflow__edge-webhook-1791519159872001-code.execute-1791526921044002",
+      "data": {},
+      "type": "custom",
+      "source": "webhook-1791519159872001",
+      "target": "code.execute-1791526921044002",
+      "selected": false
+    },
+    {
+      "id": "reactflow__edge-llm-agent-execute-1791533193943002-code.execute-1791526921259003",
+      "data": {},
+      "type": "custom",
+      "source": "llm-agent-execute-1791533193943002",
+      "target": "code.execute-1791526921259003"
+    },
+    {
+      "id": "reactflow__edge-code.execute-1791526921044002-llm-agent-execute-1791533193943002",
+      "data": {},
+      "type": "custom",
+      "source": "code.execute-1791526921044002",
+      "target": "llm-agent-execute-1791533193943002",
+      "selected": false
+    },
+    {
+      "id": "reactflow__edge-code.execute-1791526921259003-code.execute-1791539017097003",
+      "data": {},
+      "type": "custom",
+      "source": "code.execute-1791526921259003",
+      "target": "code.execute-1791539017097003"
+    },
+    {
+      "id": "reactflow__edge-code.execute-1791526921044002-code.execute-1791539017097003",
+      "data": {},
+      "type": "custom",
+      "source": "code.execute-1791526921044002",
+      "target": "code.execute-1791539017097003"
+    },
+    {
+      "id": "e-code.execute-1791539017097003-code.execute-1791543676475006-1791543676475",
+      "data": {},
+      "type": "custom",
+      "source": "code.execute-1791539017097003",
+      "target": "code.execute-1791543676475006"
+    },
+    {
+      "id": "reactflow__edge-code.execute-1791543676475006-code.execute-1791545861431007",
+      "data": {},
+      "type": "custom",
+      "source": "code.execute-1791543676475006",
+      "target": "code.execute-1791545861431007"
+    },
+    {
+      "id": "reactflow__edge-code.execute-1791545861431007-llm-agent-execute-1791542444903005",
+      "data": {},
+      "type": "custom",
+      "source": "code.execute-1791545861431007",
+      "target": "llm-agent-execute-1791542444903005"
+    },
+    {
+      "id": "reactflow__edge-llm-agent-execute-1791542444903005-code.execute-1791546392811008",
+      "data": {},
+      "type": "custom",
+      "source": "llm-agent-execute-1791542444903005",
+      "target": "code.execute-1791546392811008"
+    },
+    {
+      "id": "reactflow__edge-code.execute-1791546392811008-respondToWebhook-1791603092606001",
+      "data": {},
+      "type": "custom",
+      "source": "code.execute-1791546392811008",
+      "target": "respondToWebhook-1791603092606001"
+    }
+  ]
+}
